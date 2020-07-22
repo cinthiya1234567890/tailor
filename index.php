@@ -1,6 +1,4 @@
-<?php
-include('connection.php');
-?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -37,130 +35,33 @@ include('connection.php');
             .error{
               color:red;
             }
+           #content {
+           display:none;
+          }
+          #content1 {
+           display:none;
+          }
+          #content2 {
+           display:none;
+          }
         </style>
 
-        <script>
-          $(document).ready(function() {
-          $("#tailor").validate({
-            rules: {
-              cus_mob : {
-                required: true,
-                minlength: 10,
-                number:true
-              },
-              meterial: {
-                required: true
-              }
-            },
-            messages : {
-              cus_mob: {
-              minlength: "Mobile number should be 10 digit"
-            }
-            
-          }
-          });
-          });
-    
-          
-           $(document).ready(function(){
-            
-            $('.delete').click(function(){
-            var el = this;
-            var deleteid = $(this).data('id') /* this is your db id */
-            
-            var confirmalert = confirm("Are you sure ?");
-            if(confirmalert == true){
-              // Ajax request
-
-            $.ajax({
-              url : 'delete.php',
-              type : 'POST',
-              data : { id:deleteid },
-              success : function(response)
-              {
-               if(response == 1){
-                 $(el).closest('.panel').css('background','#b6dbfb');
-                 $(el).closest('.panel').fadeOut('800',function(){
-                  $(this).remove();
-                 });
-               }
-               else{
-                 alert('invaild id');
-               }
-              }
-            })
-            }
-            });
-          });
-
-           
-          $(document).on('change','#cus_mob', function() {
-             
-             var cus_mob = $(this).val();
-             
-              $.ajax({
-              url: 'cus_details.php',
-              type: 'post',
-              data: {cus_mobno:cus_mob},
-              dataType: 'json',
-              
-              success:function(response){
-                
-                var len = response.length;
-                for( var i = 0; i<len; i++){
-                var cus_name = response[i]['cus_name'];
-                var cus_address = response[i]['cus_address'];
-                $('#cus_name').val(cus_name);
-                $('#cus_address').val(cus_address);
-                }}
-             });
-            });
-
-
-            $(document).on('change','#qty', function() {
-          // Does some stuff and logs the event to the console
-          var qty = parseFloat($('#qty').val());
-          var pri = parseFloat($('#price').val());
-          var total = qty * pri;
-         
-          $('#total').val(total);
-          });
-
-          
-          $(document).on('change','#price', function() {
-          // Does some stuff and logs the event to the console
-          var qty1 = parseFloat($('#qty').val());
-          var pri1 = parseFloat($('#price').val());
-          var total = qty1 * pri1;
-         
-          $('#total').val(total);
-          });
-
-          // meterial list 
-
-          $(document).on('change','#meterial', function() {
-              var meterial = $(this).val();
-              $.ajax({
-              url: 'getmeterial.php',
-              type: 'post',
-              data: {meterials:meterial},
-              dataType: 'json',
-              success:function(response){
-                var len = response.length;
-                for( var i = 0; i<len; i++){
-                    var price = response[i]['price'];
-                    var qty = response[i]['qty'];
-                    var total = price * qty;
-                    $('#price').val(price);
-                    $('#qty').val(qty);
-                    $('#total').val(total);
-              }}
-             });
-            });
-
-
-
-          </script>   
+<script>
+$(document).ready(function() {
+  $("#toggle").click(function() {
+    $("#content").toggle();
+    return false;
+  });
+  $("#toggle1").click(function() {
+    $("#content1").toggle();
+    return false;
+  });
+  $("#toggle2").click(function() {
+    $("#content2").toggle();
+    return false;
+  });
+});
+</script>  
     </head>
     <body>
         <div class="container" style="margin-top:40px;">
@@ -170,7 +71,7 @@ include('connection.php');
                 </div>
             
             <div class="panel-body">
-                <form method="POST" id="tailor">
+                <form id="tailor">
                     <div class="form-row">
                         <div class="form-group col-md-6">
                           <label for=""> Entry Date</label>
@@ -261,14 +162,67 @@ include('connection.php');
                             <input type="text" class="form-control" name="price" id="price" >
                             </div>
                           
-                            <div class="form-group col-md-2" data-role="page">
+                            <div class="form-group col-md-2">
                             <label for="">Total</label>
                             <input type="text" class="form-control" name="total" id="total">
                             </div>
                             <div class="form-group col-md-1" style="text-align:center;">
                             <label for=""></label>
-                            <button name="submit" style="border: none;background-color: #fff;"><i class="fa fa-plus-circle fa-2x style" aria-hidden="true"></i></button> 
+                            
+                            <button style="border: none;background-color: #fff;" id="toggle">
+                            <i class="fa fa-plus-circle fa-2x style" aria-hidden="true"></i>
+                            </button> 
+                             
                             </div>
+                            <!-- meterial test1 -->
+                            <div class="form-row" id="content">
+                              <div class="form-group col-md-6">
+                                <label for="">Test</label>
+                                <input type="text" class="form-control" name="" autocomplete="off">
+                              </div>
+                              <div class="form-group col-md-5">
+                                <label for="">Test</label>
+                                <input type="text" class="form-control" name="" autocomplete="off">
+                              </div>
+                              <div class="form-group col-md-1" style="text-align:center;">
+                               <label for=""></label>
+                               <button style="border: none;background-color: #fff;" id="toggle1">
+                               <i class="fa fa-plus-circle fa-2x style" aria-hidden="true"></i>
+                               </button> 
+                              </div>
+                            </div>
+                          <!---end-->
+                          <!-- meterial test2 -->
+                          <div class="form-row" id="content1">
+                              <div class="form-group col-md-6">
+                                <label for="">Test</label>
+                                <input type="text" class="form-control" name="" autocomplete="off">
+                              </div>
+                              <div class="form-group col-md-5">
+                                <label for="">Test</label>
+                                <input type="text" class="form-control" name="" autocomplete="off">
+                              </div>
+                              <div class="form-group col-md-1" style="text-align:center;">
+                               <label for=""></label>
+                               <button style="border: none;background-color: #fff;" id="toggle2">
+                               <i class="fa fa-plus-circle fa-2x style" aria-hidden="true"></i>
+                               </button> 
+                              </div>
+                            </div>
+                          <!---end-->
+                          <!-- meterial test3 -->
+                          <div class="form-row" id="content2">
+                              <div class="form-group col-md-6">
+                                <label for="">Test</label>
+                                <input type="text" class="form-control" name="" autocomplete="off">
+                              </div>
+                              <div class="form-group col-md-6">
+                                <label for="">Test</label>
+                                <input type="text" class="form-control" name="" autocomplete="off">
+                              </div>
+                              
+                            </div>
+                          <!---end-->
                     </div>
                     
                     <div class="form-row">
@@ -287,71 +241,8 @@ include('connection.php');
                 </div>
                 </div>
             
-                <?php
-                if(isset($_POST['submit'])){
-                    extract($_POST);
-                    $cus_mob = $_POST['cus_mob'];
-                    $query1 = "SELECT cus_mob FROM tailor WHERE cus_mob=".$cus_mob;
-                   
-                    $q = mysqli_query($mysqli,$query1);
-                    if (mysqli_num_rows($q) >= 1) {
-                      echo '<script language="javascript">';
-                      echo 'alert("Mobile_No is Already Exist....")';
-                      echo '</script>';
-                    }
-                    else {
-                    $sql = "INSERT INTO tailor (user,entry_date,due_date,bill_no,cus_address,cus_mob,cus_name,meterial,qty,stiched_by,cutted_by,price,total,statuss)
-                    VALUES ('me','$entry_date','$due_date','$bill_no','$cus_address','$cus_mob','$cus_name','$meterial','$qty','$stiched_by','$cutted_by','$price','$total','$status')";
-                    $last_id = mysqli_insert_id($mysqli);
-                   
-                    if ($mysqli->query($sql) === TRUE) {
-                      //echo "New record created successfully";
-                    } else {
-                      echo "Error: " . $sql . "<br>" . $mysqli->error;
-                    }
-                  }
-                
-                //$qryy = "SELECT * FROM tailor WHERE id = (SELECT MAX(id) FROM tailor WHERE user='me')";
-                $qryy = "SELECT * FROM tailor";
-                $row = mysqli_query($mysqli,$qryy);
-                if (mysqli_num_rows($row) > 0) {
-                while($result = mysqli_fetch_array($row)) {
-                ?>
-                <div class="panel" style="background-color: aliceblue;padding: 8px 0 49px 0;">
-                <div class="panel-heading">
-                        <div class=" col-md-3">
-                          <label for="">Meterial</label>
-                          <p class="result"><?php echo $result['meterial'];?></p>
-                        </div>
-                        <div class=" col-md-3">
-                            <label for="">Qty</label>
-                            <p class="result"><?php echo $result['qty'];?></p>
-                         </div>
-                        <div class="col-md-2">
-                            <label for="">Price</label>
-                            <p class="result"><?php echo $result['price'];?></p>
-                        </div>
-                        <div class="col-md-2">
-                            <label for="">Total</label>
-                            <p class="result"><?php echo $result['total'];?></p>
-                        </div>
-                        <div class="col-md-2">
-                            <label for=""></label>
-                            <?php $id = $result['id']; ?>
-                            <button name="submit" class="delete" style="border: none;background-color:aliceblue;" 
-                             data-id='<?= $id ?>'>
-                           
-                            <i class="fa fa-trash fa-2x style1" aria-hidden="true"></i></button>
-                        </div>
-                        
-                </div>
-            </div>
-        <?php  }} }?>
+               
         </div>    
     </body>
-<script>
-    if ( window.history.replaceState ) {
-        window.history.replaceState( null, null, window.location.href );
-    }
-</script>
+
 </html>
